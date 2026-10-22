@@ -1,0 +1,8 @@
+Flask>=3.0
+requests>=2.31
+python-dotenv>=1.0
+pandas>=2.1
+openpyxl>=3.1
+beautifulsoup4>=4.12
+# Optional but recommended: lets the app check whether an email's domain has a mail server (MX record).
+dnspython>=2.4

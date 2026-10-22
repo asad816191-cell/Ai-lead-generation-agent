@@ -1,0 +1,28 @@
+:root {
+  --ink: #17233a;
+  --accent: #1f5fbf;
+  --surface: #f4f6fa;
+  --line: #dfe4ec;
+}
+body { background: var(--surface); color: var(--ink); font-family: "Segoe UI", system-ui, -apple-system, sans-serif; }
+.app-nav { background: linear-gradient(100deg, #14233f, #1f3a5f); }
+.app-nav .navbar-brand, .app-nav .nav-link { color: #fff; }
+.app-nav .nav-link { opacity: .8; }
+.app-nav .nav-link:hover { opacity: 1; }
+.panel { border: 1px solid var(--line); border-radius: 12px; box-shadow: 0 1px 2px rgba(20, 35, 63, .05); }
+.btn-primary { --bs-btn-bg: var(--accent); --bs-btn-border-color: var(--accent); --bs-btn-hover-bg: #174b98; --bs-btn-hover-border-color: #174b98; }
+.filter-input { width: 200px; }
+.results-wrap { max-height: 65vh; overflow: auto; border: 1px solid var(--line); border-radius: 8px; }
+.results-table { margin: 0; font-size: .85rem; }
+.results-table thead th { position: sticky; top: 0; background: #eef2f8; white-space: nowrap; z-index: 1; font-weight: 600; }
+.results-table td { max-width: 280px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.results-table td.wide { max-width: 360px; }
+.nf { color: #9aa3b2; font-style: italic; }
+.prompt-cell { max-width: 420px; }
+.badge-soft { background: #e8eefb; color: #1f4a94; font-weight: 500; }
+.provider-on { background: #e3f4ea; color: #17633a; }
+.provider-off { background: #f1f2f5; color: #6b7384; }
+#recent .list-group-item { padding: .55rem 0; background: transparent; border-color: var(--line); }
+#recent a { text-decoration: none; color: var(--ink); }
+#recent a:hover .recent-title { color: var(--accent); }
+.recent-title { font-weight: 600; font-size: .88rem; }

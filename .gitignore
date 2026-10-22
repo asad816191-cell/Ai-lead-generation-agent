@@ -1,0 +1,10 @@
+.env
+.venv/
+venv/
+__pycache__/
+*.pyc
+data/*.db
+data/*.db-journal
+.vscode/
+.pytest_cache/
+*.zip

@@ -1,0 +1,48 @@
+{% extends "base.html" %}
+{% block title %}History - Lead Generation Agent{% endblock %}
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-3">
+  <h1 class="h4 mb-0">Search history</h1>
+  <a class="btn btn-primary btn-sm" href="{{ url_for('index') }}"><i class="bi bi-plus-lg"></i> New search</a>
+</div>
+<div id="alerts"></div>
+<div class="card panel">
+  <div class="table-responsive">
+    <table class="table table-hover align-middle mb-0">
+      <thead>
+        <tr><th>#</th><th>Search</th><th>Location</th><th>Leads</th><th>Status</th><th>Date</th><th class="text-end">Actions</th></tr>
+      </thead>
+      <tbody>
+        {% for s in searches %}
+        <tr>
+          <td>{{ s.id }}</td>
+          <td>
+            <div class="fw-semibold">{{ s.industry }}</div>
+            <div class="small text-secondary text-truncate prompt-cell" title="{{ s.prompt }}">{{ s.prompt }}</div>
+          </td>
+          <td>{{ s.location }}</td>
+          <td>{{ s.result_count }} <span class="text-secondary small">/ {{ s.requested_count }}</span></td>
+          <td>
+            {% if s.status == 'completed' %}<span class="badge text-bg-success">Completed</span>
+            {% elif s.status == 'failed' %}<span class="badge text-bg-danger" title="{{ s.message }}">Failed</span>
+            {% else %}<span class="badge text-bg-warning">{{ s.status|capitalize }}</span>{% endif %}
+          </td>
+          <td class="small text-nowrap">{{ s.created_at }}</td>
+          <td class="text-end text-nowrap">
+            <a class="btn btn-outline-primary btn-sm" href="{{ url_for('index', search=s.id) }}">Open</a>
+            {% if s.status == 'completed' and s.result_count %}
+            <a class="btn btn-outline-success btn-sm" href="{{ url_for('api_export', search_id=s.id, fmt='xlsx') }}">Excel</a>
+            <a class="btn btn-outline-success btn-sm" href="{{ url_for('api_export', search_id=s.id, fmt='csv') }}">CSV</a>
+            {% endif %}
+            <button class="btn btn-outline-danger btn-sm js-delete" data-id="{{ s.id }}" title="Delete"><i class="bi bi-trash"></i></button>
+          </td>
+        </tr>
+        {% else %}
+        <tr><td colspan="7" class="text-center text-secondary py-5">No searches yet. <a href="{{ url_for('index') }}">Run your first search</a>.</td></tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+{% endblock %}
+{% block scripts %}<script src="{{ url_for('static', filename='js/history.js') }}"></script>{% endblock %}

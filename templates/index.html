@@ -1,0 +1,109 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="row g-4">
+  <div class="col-lg-9">
+    <div id="alerts"></div>
+
+    <section class="card panel mb-4">
+      <div class="card-body">
+        <div class="d-flex flex-wrap justify-content-between align-items-start gap-2 mb-3">
+          <div>
+            <h1 class="h4 mb-1">Find business leads</h1>
+            <p class="text-secondary mb-0">Describe who you are looking for. Only publicly listed business details are collected; anything not published is marked <em>Not Found</em>.</p>
+          </div>
+          <div id="provider-badges" class="d-flex flex-wrap gap-2"></div>
+        </div>
+
+        <form id="search-form" novalidate>
+          <label for="prompt" class="form-label fw-semibold">Prompt</label>
+          <textarea id="prompt" class="form-control mb-3" rows="3" maxlength="1000"
+            placeholder="Find 100 real estate companies in Toronto, Ontario, Canada, including company names, phone numbers, business email addresses, websites, and addresses."></textarea>
+
+          <div class="row g-3 align-items-end">
+            <div class="col-md-4">
+              <label for="industry" class="form-label">Industry / business type <span class="text-secondary">(optional)</span></label>
+              <input id="industry" class="form-control" maxlength="120" placeholder="e.g. real estate agencies">
+            </div>
+            <div class="col-md-4">
+              <label for="location" class="form-label">Location <span class="text-secondary">(optional)</span></label>
+              <input id="location" class="form-control" maxlength="120" placeholder="e.g. Toronto, Ontario, Canada">
+            </div>
+            <div class="col-md-2">
+              <label for="count" class="form-label">Lead quantity</label>
+              <input id="count" type="number" class="form-control" min="1" placeholder="from prompt">
+            </div>
+            <div class="col-md-2 d-grid">
+              <button id="search-btn" class="btn btn-primary" type="submit"><i class="bi bi-search"></i> Search</button>
+            </div>
+          </div>
+          <div class="form-check mt-3">
+            <input class="form-check-input" type="checkbox" id="enrich" {% if settings.ENRICH_WEBSITES_DEFAULT %}checked{% endif %}>
+            <label class="form-check-label" for="enrich">Also read each company's official website (contact page) for a public email/phone. Slower, respects robots.txt.</label>
+          </div>
+          <p class="form-text mb-0">Fields above override what is read from the prompt. Leave them empty to use the prompt only.</p>
+        </form>
+      </div>
+    </section>
+
+    <section id="progress-card" class="card panel mb-4 d-none">
+      <div class="card-body">
+        <div class="d-flex justify-content-between mb-2">
+          <strong id="progress-title">Searching…</strong>
+          <span id="progress-pct" class="text-secondary">0%</span>
+        </div>
+        <div class="progress" role="progressbar" aria-label="Search progress">
+          <div id="progress-bar" class="progress-bar progress-bar-striped progress-bar-animated"></div>
+        </div>
+        <p id="progress-msg" class="text-secondary small mt-2 mb-0"></p>
+      </div>
+    </section>
+
+    <section id="results-card" class="card panel d-none">
+      <div class="card-body">
+        <div class="d-flex flex-wrap justify-content-between align-items-center gap-2 mb-3">
+          <div>
+            <h2 class="h5 mb-0" id="results-title">Results</h2>
+            <div class="text-secondary small" id="results-sub"></div>
+          </div>
+          <div class="d-flex flex-wrap gap-2">
+            <input id="table-filter" class="form-control form-control-sm filter-input" placeholder="Filter results…">
+            <a id="dl-xlsx" class="btn btn-success btn-sm" href="#"><i class="bi bi-file-earmark-excel"></i> Excel</a>
+            <a id="dl-csv" class="btn btn-outline-success btn-sm" href="#"><i class="bi bi-filetype-csv"></i> CSV</a>
+          </div>
+        </div>
+        <div class="table-responsive results-wrap">
+          <table class="table table-hover table-sm align-middle results-table">
+            <thead id="results-head"></thead>
+            <tbody id="results-body"></tbody>
+          </table>
+        </div>
+        <div class="d-flex justify-content-between align-items-center mt-3">
+          <span class="text-secondary small" id="page-info"></span>
+          <div class="btn-group btn-group-sm">
+            <button id="prev-page" class="btn btn-outline-secondary">Previous</button>
+            <button id="next-page" class="btn btn-outline-secondary">Next</button>
+          </div>
+        </div>
+        <p class="small text-secondary mt-3 mb-0">
+          <strong>About verification:</strong> statuses describe <em>where</em> a record came from. Phone numbers and emails are never called or mailed, so none is guaranteed valid. Check anti-spam and data-protection rules (CASL, CAN-SPAM, GDPR…) before contacting anyone.
+        </p>
+      </div>
+    </section>
+  </div>
+
+  <aside class="col-lg-3">
+    <section class="card panel">
+      <div class="card-body">
+        <div class="d-flex justify-content-between align-items-center mb-2">
+          <h2 class="h6 mb-0">Recent searches</h2>
+          <a href="{{ url_for('history') }}" class="small">All</a>
+        </div>
+        <div id="recent" class="list-group list-group-flush"></div>
+      </div>
+    </section>
+  </aside>
+</div>
+
+<script id="lead-columns" type="application/json">{{ columns|tojson }}</script>
+{% endblock %}
+{% block scripts %}<script src="{{ url_for('static', filename='js/app.js') }}"></script>{% endblock %}
